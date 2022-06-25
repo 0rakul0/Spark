@@ -2,8 +2,8 @@
  banco de dados com spark apache
 
 # link para download    
-  Anaconda: https://www.anaconda.com/products/individual
-  Spark:    https://spark.apache.org/downloads.html
+  Anaconda: https://www.anaconda.com/products/individual<br>
+  Spark:    https://spark.apache.org/downloads.html<br>
   Java JDK: https://www.oracle.com/java/technologies/javase-downloads.html   
   Hadoop:   https://hadoop.apache.org/release/3.2.2.html
 
