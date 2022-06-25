@@ -1,0 +1,5 @@
+dolar;5.075
+euro;5.538855000000001
+bitcoin;39226.9
+ethereum;2590.1
+Bitcoin Cash;292.5
