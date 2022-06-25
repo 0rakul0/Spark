@@ -1,11 +1,19 @@
 # Spark
  banco de dados com spark apache
 
+# link Spark
+    https://spark.apache.org
+
 # link do databricks
     https://databricks.com/
 
+# link de apoio
+    https://www.youtube.com/watch?v=WpIDLm9ow2o
+    https://www.youtube.com/watch?v=0BY8KySBHwE
+    https://www.youtube.com/watch?v=FTH8WJ-odmM
+
 # importações
-from pyspark.sql.functions import max
+    from pyspark.sql.functions import max
 
 # usando o dataframe
     arquivo = "dbfs:/databricks-datasets/flights/"
