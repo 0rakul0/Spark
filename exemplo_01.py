@@ -16,14 +16,11 @@ class spark_big_data():
         return df
 
     def manipulacao(self, schema):
-        try:
-            valor_max = schema.select(max("valor")).take(1)
-            valor_min = schema.select(min("valor")).take(1)
-
-            print(valor_max)
-            print(valor_min)
-        except Exception as e:
-            print(e)
+        valor_max = schema.select(max("valor")).take(1)
+        valor_min = schema.select(min("valor")).take(1)
+        print(valor_max)
+        print(valor_min)
+        return valor_max, valor_min
 
 if __name__=="__main__":
     sp = spark_big_data()
