@@ -7,6 +7,23 @@
 # link do databricks
     https://databricks.com/
 
+# Tutorial para instalação e configuração do pyspark
+  --- Aula 01 - Conceitos Básicos de PySpark
+  https://www.youtube.com/watch?v=WpIDLm9ow2o    
+  
+   --- Aula 02 - Baixa dos softwares Apache SPARK, Anaconda e Java(JDK)
+  https://www.youtube.com/watch?v=qtEZXXrGkFk   
+  
+  --- Aula 03 - Instalar os softwares Java JDK, Anaconda, Pyspark
+  https://www.youtube.com/watch?v=L3oWBs0aMvI    
+  
+  --- Aula 04 - Configuração das variáveis de ambiente no Windows 
+  https://www.youtube.com/watch?v=WXnVnwy-Zko    
+  
+  --- Aula 05 - Executando os softwares Apache SPARK e PYSPARK
+  https://www.youtube.com/watch?v=xKOSnC2pICo    
+
+
 # link de apoio
     https://www.youtube.com/watch?v=WpIDLm9ow2o
     https://www.youtube.com/watch?v=0BY8KySBHwE
