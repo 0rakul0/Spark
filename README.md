@@ -69,3 +69,121 @@
 
     remove qualquer linha nula de qualquer coluna
     df.na.drop().show()
+
+## funções importantes
+
+- lit
+  - Creates a :class:`~pyspark.sql.Column` of literal value.
+  
+  ````py 
+  df.select(lit(5).alias('height')).withColumn('spark_user', lit(True)).take(1)
+    [Row(height=5, spark_user=True)]
+  ````
+
+- col
+  - Returns a :class:`~pyspark.sql.Column` based on the given column name.'
+
+```py
+    col = column
+    col('x')
+    Column<'x'>
+    column('x')
+    Column<'x'>
+
+```
+- asc
+  - Returns a sort expression based on the ascending order of the given column name.
+
+- desc
+  - Returns a sort expression based on the descending order of the given column name.
+
+- sqrt
+  - Computes the square root of the specified float value.
+
+- abs
+  - Computes the absolute value.
+
+- max
+  - Returns the maximum value of the expression in a group.
+
+- min
+  - Returns the minimum value of the expression in a group.
+
+- max_by
+  - Returns the value associated with the maximum value of ord.
+    
+```py
+  
+        df = spark.createDataFrame([("Java", 2012, 20000),
+                                ("dotNET", 2012, 5000),
+                                ("dotNET", 2013, 48000),
+                                ("Java", 2013, 30000)],
+                               schema=("course", "year", "earnings"))
+    
+        df.groupby("course").agg(max_by("year", "earnings")).show()
+    
+        +------+----------------------+
+        |course|max_by(year, earnings)|
+        +------+----------------------+
+        |  Java|                  2013|
+        |dotNET|                  2013|
+        +------+----------------------+
+  
+```
+
+- min_by
+  - Returns the value associated with the minimum value of ord.
+
+```py
+  
+        df = spark.createDataFrame([("Java", 2012, 20000),
+                                    ("dotNET", 2012, 5000),
+                                    ("dotNET", 2013, 48000),
+                                    ("Java", 2013, 30000)],
+                                   schema=("course", "year", "earnings"))
+        
+        df.groupby("course").agg(min_by("year", "earnings")).show()
+        
+        +------+----------------------+
+        |course|max_by(year, earnings)|
+        +------+----------------------+
+        |  Java|                  2013|
+        |dotNET|                  2013|
+        +------+----------------------+
+  
+```
+
+- count
+  - Returns the number of items in a group.
+
+
+- sum
+  - Returns the sum of all values in the expression.
+
+
+- mean ou avg
+  - Returns the average of the values in a group.
+
+
+- sum_distinct
+  - Returns the sum of distinct values in the expression.
+
+
+- product
+  - col : str, :class:`Column`
+        column containing values to be multiplied together
+
+    Examples
+```py
+        df = spark.range(1, 10).toDF('x').withColumn('mod3', col('x') % 3)
+        prods = df.groupBy('mod3').agg(product('x').alias('product'))
+        prods.orderBy('mod3').show()
+        
+        +----+-------+
+        |mod3|product|
+        +----+-------+
+        |   0|  162.0|
+        |   1|   28.0|
+        |   2|   80.0|
+        +----+-------+
+```
