@@ -1,5 +1,6 @@
 # Spark
  banco de dados com spark apache
+ https://spark.apache.org/docs/latest/quick-start.html
 
 # link para download    
   Anaconda: https://www.anaconda.com/products/individual<br>
@@ -37,7 +38,7 @@
 
 # usando o dataframe
     arquivo = "dbfs:/databricks-datasets/flights/"
-    df = spark.read.format("csv").option("inferSchema", "True").option("header", "True").csv(arquivo)
+    df = spark.read.format("csv").option("inferSchema", "True").option("header", "True").option("sep", ";").csv(arquivo)
     
 # visualizando o tipo de dado
     df.printSchema()
