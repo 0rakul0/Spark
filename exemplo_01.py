@@ -74,7 +74,3 @@ if __name__ == "__main__":
     sp = spark_big_data()
     end = "./data/Test.csv"
     df = sp.run(arquivo=end, rdd=True, search="lula")
-
-
-
-
