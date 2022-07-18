@@ -28,14 +28,18 @@ class spark_big_data():
 
     def schema(self, arquivo, rdd):
         arquivo = arquivo
-        if rdd:
+
+        if rdd == True:
             schema = spark.sparkContext.textFile(arquivo)
             schema.cache()
-        else:
+        elif rdd == False:
             df = spark.read.format("csv").option("inferSchema", "True").option("header", "True").option("sep", ";").csv(
                 arquivo, encoding='utf-8')
             schema = df.select("*").withColumn("id", monotonically_increasing_id())
             schema.cache()
+        else:
+            schema = SparkSession.builder.appName("Schema_twitter").getOrCreate()
+
         return schema
 
     def info_schema(self, schema):
