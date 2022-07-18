@@ -30,11 +30,12 @@ class spark_big_data():
         arquivo = arquivo
         if rdd:
             schema = spark.sparkContext.textFile(arquivo)
+            schema.cache()
         else:
             df = spark.read.format("csv").option("inferSchema", "True").option("header", "True").option("sep", ";").csv(
                 arquivo, encoding='utf-8')
             schema = df.select("*").withColumn("id", monotonically_increasing_id())
-
+            schema.cache()
         return schema
 
     def info_schema(self, schema):
@@ -68,10 +69,12 @@ class spark_big_data():
         texto = schema.filter(lambda x: f'{search}' in x)
         print(texto.collect())
 
+
 if __name__ == "__main__":
     sp = spark_big_data()
     end = "./data/Test.csv"
     df = sp.run(arquivo=end, rdd=True, search="lula")
+
 
 
 
