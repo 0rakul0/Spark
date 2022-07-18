@@ -39,7 +39,11 @@
 # usando o dataframe
     arquivo = "dbfs:/databricks-datasets/flights/"
     df = spark.read.format("csv").option("inferSchema", "True").option("header", "True").option("sep", ";").csv(arquivo)
-    
+
+# usando RDD -> Resilient Distributed Datasets
+    schema = spark.sparkContext.textFile(arquivo)
+    schema.cache()
+
 # visualizando o tipo de dado
     df.printSchema()
     df.take(7)
