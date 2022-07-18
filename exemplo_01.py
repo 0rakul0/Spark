@@ -38,8 +38,8 @@ class spark_big_data():
             schema = df.select("*").withColumn("id", monotonically_increasing_id())
             schema.cache()
         else:
-            schema = SparkSession.builder.appName("Schema_twitter").getOrCreate()
-
+            spark = SparkSession.builder.appName("Schema_twitter").getOrCreate()
+            schema = spark.read.csv(arquivo, header=True)
         return schema
 
     def info_schema(self, schema):
