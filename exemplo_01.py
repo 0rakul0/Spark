@@ -1,17 +1,21 @@
-﻿import shutil
+﻿import re
+import shutil
 
 from pyspark.shell import spark
-from pyspark.sql.functions import max, desc, asc, expr, min, monotonically_increasing_id, lit
+from pyspark.sql.functions import *
 import spark_df_profiling
 from pyspark.sql import *
 from wordcloud import WordCloud, STOPWORDS
+from operator import add
 from pyspark.mllib.classification import NaiveBayes, NaiveBayesModel
 from pyspark.mllib.util import MLUtils
 
 class spark_big_data():
+    def __init__(self):
+        self.rdd = None
 
-    def run(self, arquivo, end=None, rdd=None, info=None, view=None, view_unique_column=None, profiling=None, cloud=None, search=None):
-        schema = self.schema(arquivo, rdd)
+    def run(self, arquivo, rdd=None, info=None, view=None, view_unique_column=None, profiling=None, cloud=None, search=None, analise=None):
+        schema = self.schema(arquivo, rdd, spark)
         if info:
             self.info_schema(schema)
         if view:
@@ -21,17 +25,19 @@ class spark_big_data():
         if view_unique_column:
             self.view_unique_column(schema, nameColumn=view_unique_column)
         if cloud:
-            self.colud(end)
+            self.colud(end=end)
         if search:
             self.search(schema, search)
+        if analise:
+            self.contador(schema)
+        schema.cache()
         return schema
 
-    def schema(self, arquivo, rdd):
+    def schema(self, arquivo, rdd, spark):
         arquivo = arquivo
 
-        if rdd == True:
+        if rdd:
             schema = spark.sparkContext.textFile(arquivo)
-            schema.cache()
         elif rdd == False:
             df = spark.read.format("csv").option("inferSchema", "True").option("header", "True").option("sep", ";").csv(
                 arquivo, encoding='utf-8')
@@ -39,7 +45,9 @@ class spark_big_data():
             schema.cache()
         else:
             spark = SparkSession.builder.appName("Schema_twitter").getOrCreate()
-            schema = spark.read.csv(arquivo, header=True)
+            schema = spark.read.option("header", "True").csv(arquivo)
+
+        self.rdd = rdd
         return schema
 
     def info_schema(self, schema):
@@ -48,17 +56,22 @@ class spark_big_data():
 
     def view_schema(self, schema):
         #toda a tabela
-        schema.select("id", "tweet_text", "tweet_date", "sentiment", "query_used").show()
+        if self.rdd==False:
+            schema.select("id", "tweet_text", "tweet_date", "sentiment", "query_used").show()
+        else:
+            print(schema.collect())
 
     def profilling(self, schema):
         schema.printSchema()
         schema.select("id", "tweet_text", "tweet_date", "sentiment", "query_used").show()
+        self.contador(schema)
 
     def view_unique_column(self, schema, nameColumn=None):
         schema.select(nameColumn).show()
 
     def colud(self, end):
         texto = open(end, mode='r', encoding='utf-8').read()
+
         stopwords = STOPWORDS
         wc = WordCloud(
         background_color = 'white',
@@ -70,11 +83,35 @@ class spark_big_data():
         wc.to_file(f'data/texto_doc.png')
 
     def search(self,schema, search):
-        texto = schema.filter(lambda x: f'{search}' in x)
-        print(texto.collect())
+        if self.rdd == True:
+            texto = schema.filter(lambda x: f'{search}' in str(x).lower()) #lower aqui tem a função de normalização para minuscolo
+            for i in texto.collect():
+                print(f'\nA palavra pesquisada foi {search} no tweet {i}')
+        else:
+            texto = schema.select("id", "tweet_text", "sentiment", "query_used")
+            for i in texto.collect():
+                if re.search(f'{search}', str(i), re.IGNORECASE):
+                    print(f'\nA palavra pesquisada foi {search} no tweet {i}')
+
+    def contador(self, schema):
+        if self.rdd == True:
+            texto_sem = ['a','e','o','da','de','do','das', 'dos', 'Wed', 'Aug', 'https', 'http', 'Fri', 'ele', 'não', 'um',
+                         'uma', 'só', 'queria']
+            filtro_palavras = schema.filter(lambda x: x not in texto_sem)
+            freq_sentimento = filtro_palavras.map(lambda x: [x[-4],1])
+            totalSentimento = freq_sentimento.reduceByKey(add)
+            print(totalSentimento.collect())
+        else:
+            #aplicação de regex
+            totalSentimentoPositivos = schema.filter(col("sentiment").rlike('1')).count()
+            totalSentimentoNegativos = schema.filter(col("sentiment").rlike('0')).count()
+
+            print(f"sentimentos positivos:{totalSentimentoPositivos}, sentimentos negativos: {totalSentimentoNegativos}")
 
 
 if __name__ == "__main__":
     sp = spark_big_data()
     end = "./data/Test.csv"
-    df = sp.run(arquivo=end, rdd=True, search="lula")
+    df = sp.run(arquivo=end, rdd=True, analise=True, search='bolsonaro')
+
+    #com o rdd  = False pega mais coisa
