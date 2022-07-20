@@ -791,7 +791,7 @@ id;tweet_text;tweet_date;sentiment;query_used
 1029553241422548992;@han_song123 i pretend for you????? uhhuuhhhhhhh *spell* :D;Wed Aug 15 02:19:55 +0000 2018;1;:)
 1029553252193525761;Alguém acordado? :);Wed Aug 15 02:19:58 +0000 2018;1;:)
 1029553286184091648;@RealitySocial maravilhosa :);Wed Aug 15 02:20:06 +0000 2018;1;:)
-1029553291192098827;"Tem um erro nessa formula que tira meu sono a dois dias... Se você entender do que eu estou falando, ficaria grato por uma dica. :) =SE(LINS($M$5:M5)&gt;CONT.VALORES($M$5:$M$300);"""";ÍNDICE($M$5:$M$300;MENOR(SE($M$5:$M$300&lt;&gt;"""";LIN($M$5:$M$300)-LIN($M$5)+1);LINS($M$5:M5))))";Wed Aug 15 02:20:07 +0000 2018;1;:)
+1029553291192098827;"Tem um erro nessa formula que tira meu sono a dois dias... Se você entender do que eu estou falando, ficaria grato por uma dica. :) =SE(LINS($M$5:M5)&gt,CONT.VALORES($M$5:$M$300),"""",ÍNDICE($M$5:$M$300,MENOR(SE($M$5:$M$300&lt,&gt,"""",LIN($M$5:$M$300)-LIN($M$5)+1),LINS($M$5:M5))))";Wed Aug 15 02:20:07 +0000 2018;1;:)
 1029553303393325056;Mas como estou vivo, vão ter de levar comigo :))))) eheheh https://t.co/61h7lwPCcL;Wed Aug 15 02:20:10 +0000 2018;1;:)
 1029553323488280576;@gustastockler Tchauu.. :);Wed Aug 15 02:20:15 +0000 2018;1;:)
 1029553343029567488;@PopSeriesBrasil Olá! Poderiam divulgar nosso mais novo portal sobre o ator Miguel Herrán? :);Wed Aug 15 02:20:19 +0000 2018;1;:)
