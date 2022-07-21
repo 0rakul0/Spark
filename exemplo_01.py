@@ -122,7 +122,8 @@ if __name__ == "__main__":
     # nota só usar um metodo de >> | sql | rdd | dataframe |
     nome_schema = "schema_twitter"
     #analise com sql
-    sql = f"select count(sentiment) as qte, sentiment from {nome_schema} group by (sentiment)"
+    # sql = f"select count(sentiment) as qte, sentiment from {nome_schema} group by (sentiment)"
+    sql = f"select * from {nome_schema}"
     df = sp.run(arquivo=end, view=True, sql=sql, nome_schema=nome_schema)
     
 
