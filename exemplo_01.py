@@ -15,8 +15,8 @@ class spark_big_data():
     def __init__(self):
         self.rdd = None
 
-    def run(self, arquivo, rdd=None, info=None, view=None, view_unique_column=None, profiling=None, cloud=None, search=None, analise=None, sql=None,
-            nome_schema=None):
+    def run(self, arquivo, rdd=None, info=None, view=None, view_unique_column=None,
+            profiling=None, cloud=None, search=None, analise=None, sql=None, nome_schema=None):
         schema = self.schema(arquivo, rdd, spark, nome_schema)
         if info:
             self.info_schema(schema)
@@ -91,7 +91,7 @@ class spark_big_data():
 
     def search(self,schema, search):
         if self.rdd == True:
-            texto = schema.filter(lambda x: f'{search}' in str(x).lower()) #lower aqui tem a função de normalização para minuscolo
+            texto = schema.filter(lambda x: f'{search}' in str(x).lower())
             for i in texto.collect():
                 print(f'\nA palavra pesquisada foi {search} no tweet {i}')
         else:
@@ -102,18 +102,19 @@ class spark_big_data():
 
     def contador(self, schema):
         if self.rdd == True:
-            texto_sem = ['a','e','o','da','de','do','das', 'dos', 'Wed', 'Aug', 'https', 'http', 'Fri', 'ele', 'não', 'um',
-                         'uma', 'só', 'queria']
+            texto_sem = ['a', 'e', 'o', 'da', 'de', 'do', 'das', 'dos', 'Wed', 'Aug', 'https', 'http', 'Fri', 'ele', 'não',
+                     'um', 'uma', 'só', 'queria', ':);Wed', "((((("]
+            # filtro_palavras = schema.filter(lambda x: x[19:-36] not in texto_sem)
             filtro_palavras = schema.filter(lambda x: x not in texto_sem)
             freq_sentimento = filtro_palavras.map(lambda x: [x[-4],1])
             totalSentimento = freq_sentimento.reduceByKey(add)
             print(totalSentimento.collect())
+
         else:
             #aplicação de regex
             totalSentimentoPositivos = schema.filter(col("sentiment").rlike('1')).count()
             totalSentimentoNegativos = schema.filter(col("sentiment").rlike('0')).count()
             print(f"sentimentos positivos:{totalSentimentoPositivos}, sentimentos negativos: {totalSentimentoNegativos}")
-
 
 if __name__ == "__main__":
     sp = spark_big_data()
@@ -122,13 +123,14 @@ if __name__ == "__main__":
     # nota só usar um metodo de >> | sql | rdd | dataframe |
     nome_schema = "schema_twitter"
     #analise com sql
+    # sql = f"select count(query_used) as qte, query_used from {nome_schema} group by (query_used)"
     # sql = f"select count(sentiment) as qte, sentiment from {nome_schema} group by (sentiment)"
-    sql = f"select * from {nome_schema}"
-    df = sp.run(arquivo=end, view=True, sql=sql, nome_schema=nome_schema)
-    
-
+    sql = f"select tweet_text from {nome_schema}"
+    #
+    df = sp.run(arquivo=end,
+                view=True,
+                sql=sql,
+                nome_schema=nome_schema)
+    # df = sp.run(arquivo=end, rdd=True, analise=True)
     # com analise ativa
-    # df = sp.run(arquivo=end, analise=True)
-
-    #view
     # df = sp.run(arquivo=end, analise=True)
