@@ -1,7 +1,10 @@
 # Spark
  banco de dados com spark apache
  https://spark.apache.org/docs/latest/quick-start.html
-
+ 
+# Hadoop
+ https://acervolima.com/instalando-e-configurando-o-hadoop-no-modo-pseudo-distribuido-no-windows-10/
+ 
 # link para download    
   Anaconda: https://www.anaconda.com/products/individual<br>
   Spark:    https://spark.apache.org/downloads.html<br>
