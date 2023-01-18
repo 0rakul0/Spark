@@ -4,13 +4,15 @@
  
 # Hadoop
  https://acervolima.com/instalando-e-configurando-o-hadoop-no-modo-pseudo-distribuido-no-windows-10/
+ https://www.youtube.com/watch?v=OwTUExSFL-Y
  
 # link para download    
-  Anaconda: https://www.anaconda.com/products/individual<br>
-  Spark:    https://spark.apache.org/downloads.html<br>
-  Java JDK: https://www.oracle.com/java/technologies/javase-downloads.html   
-  Hadoop:   https://hadoop.apache.org/release/3.2.2.html
-
+  Anaconda:   https://www.anaconda.com/products/individual<br>
+  Spark:      https://spark.apache.org/downloads.html<br>
+  Java JDK:   https://www.oracle.com/java/technologies/downloads/#java8   
+  Hadoop:     https://hadoop.apache.org/release/3.3.0.html
+  Hadoop/bin: https://drive.google.com/file/d/1zuT8G3D2JFkbkdv6fMhnhBOj8YSsgJc-/view 
+  Config/arq: https://drive.google.com/file/d/1DUcsitCWp5RxLc4R-BVM6CRtK7Obf67M/view
 # link do databricks
     https://databricks.com/
 
