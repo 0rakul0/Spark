@@ -1,6 +1,17 @@
 # Spark
  banco de dados com spark apache
- https://spark.apache.org/docs/latest/quick-start.html
+ https://spark.apache.org/docs/latest/api/python/getting_started/install.html#using-pypi
+ <hr>
+pip install pyspark
+<hr>
+# Spark SQL<p>
+pip install pyspark[sql]
+<hr>
+# pandas API on Spark<p>
+pip install pyspark[pandas_on_spark] plotly
+<hr>
+ 
+ 
  
 # Hadoop
  https://acervolima.com/instalando-e-configurando-o-hadoop-no-modo-pseudo-distribuido-no-windows-10/
