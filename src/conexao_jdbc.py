@@ -2,7 +2,7 @@ import psycopg2
 import pandas as pd
 import numpy as np
 
-# gera dataframe aleatório 
+# gera dataframe aleatório
 def get_dataset(size):
     df = pd.DataFrame()
     df['id_processo'] = np.random.permutation(np.arange(1, size + 1)) + 1
@@ -15,32 +15,37 @@ def get_dataset(size):
     df['julgamento'] = np.random.choice([True, False], size)
     return df
 
-#cria a tabela 
-def create_table_in_postgres(table_name, conn):
+#cria a tabela se não existir
+def create_table_if_not_exists(schema, table, conn):
     cursor = conn.cursor()
     cursor.execute("""
-        CREATE TABLE desenv_processos.{} (
-            id_processo SERIAL PRIMARY KEY,
-            data DATE,
-            status VARCHAR,
-            tipo_da_acao VARCHAR,
-            comarca VARCHAR,
-            tipo_movimento VARCHAR,
-            julgamento BOOLEAN
-        )
-    """.format(table_name))
+    DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = '{}' AND table_name = '{}') THEN
+            CREATE TABLE {}.{} (
+                id_processo SERIAL PRIMARY KEY,
+                data DATE NOT NULL,
+                status VARCHAR NOT NULL,
+                tipo_da_acao VARCHAR NOT NULL,
+                comarca VARCHAR NOT NULL,
+                tipo_movimento VARCHAR NOT NULL,
+                julgamento BOOLEAN NOT NULL
+            );
+        END IF;
+    END$$;
+    """.format(schema, table, schema, table))
     conn.commit()
     cursor.close()
+
 
 # gera a tabela em sql
 def insert_dataframe_into_postgres(df, table_name, conn):
     cursor = conn.cursor()
-    for index, row in df.iterrows():
-        values = (row['id_processo'], row['data'], row['status'], row['tipo_da_acao'], row['comarca'], row['tipo_movimento'], row['julgamento'])
-        cursor.execute("""
-            INSERT INTO desenv_processos.{} (id_processo, data, status, tipo_da_acao, comarca, tipo_movimento, julgamento)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """.format(table_name), values)
+    data = [tuple(row) for i, row in df.iterrows()]
+    cursor.executemany("""
+        INSERT INTO desenv_processos.{} (id_processo, data, status, tipo_da_acao, comarca, tipo_movimento, julgamento)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """.format(table_name), data)
     conn.commit()
     cursor.close()
 
@@ -57,7 +62,7 @@ conn = psycopg2.connect(host=host, user=user, password=password, port=32768, dat
 #tamanho da amostra
 df = get_dataset(10000)
 
-create_table_in_postgres("processos_movimento", conn)
+create_table_if_not_exists("desenv_processo", "processos_movimento", conn)
 insert_dataframe_into_postgres(df, "processos_movimento", conn)
 
 conn.close()
