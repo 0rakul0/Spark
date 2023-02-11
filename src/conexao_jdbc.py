@@ -52,4 +52,4 @@ create_table_in_postgres("processos_movimento", conn)
 insert_dataframe_into_postgres(df, "processos_movimento", conn)
 conn.close()
 
-df.to_csv('./csv/dados.csv')
+df.to_csv('../csv/dados.csv')
