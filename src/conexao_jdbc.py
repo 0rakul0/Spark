@@ -2,7 +2,7 @@ import psycopg2
 import pandas as pd
 import numpy as np
 
-
+# gera dataframe aleatório 
 def get_dataset(size):
     df = pd.DataFrame()
     df['id_processo'] = np.random.permutation(np.arange(1, size + 1)) + 1
@@ -15,6 +15,7 @@ def get_dataset(size):
     df['julgamento'] = np.random.choice([True, False], size)
     return df
 
+#cria a tabela 
 def create_table_in_postgres(table_name, conn):
     cursor = conn.cursor()
     cursor.execute("""
@@ -30,6 +31,8 @@ def create_table_in_postgres(table_name, conn):
     """.format(table_name))
     conn.commit()
     cursor.close()
+
+# gera a tabela em sql
 def insert_dataframe_into_postgres(df, table_name, conn):
     cursor = conn.cursor()
     for index, row in df.iterrows():
@@ -41,15 +44,23 @@ def insert_dataframe_into_postgres(df, table_name, conn):
     conn.commit()
     cursor.close()
 
+# configuração de credenciais
 host = 'host.docker.internal'
 user = 'postgres'
 password = 'postgrespw'
 port = '32768'
 
+
+# esse postgres vem do docker aqui é gerado 10000 amostras para treinamento de SQL
 conn = psycopg2.connect(host=host, user=user, password=password, port=32768, database="postgres")
+
+#tamanho da amostra
 df = get_dataset(10000)
+
 create_table_in_postgres("processos_movimento", conn)
 insert_dataframe_into_postgres(df, "processos_movimento", conn)
+
 conn.close()
 
+# salva o csv na pasta csv
 df.to_csv('../csv/dados.csv')
